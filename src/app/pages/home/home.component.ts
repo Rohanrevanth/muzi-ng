@@ -16,6 +16,10 @@ export class HomeComponent {
 
   constructor(private apiService: ApiService) {}
 
+  ngOnInit() {
+    this.fetchData()
+  }
+
   fetchData(): void {
     this.loading = true;
     this.apiService.getData().subscribe({

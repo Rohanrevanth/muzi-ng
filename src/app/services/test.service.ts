@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Replace with your endpoint
+  private apiUrl = 'http://localhost:8080'; 
 
   constructor(private http: HttpClient) {}
 
   getData(): Observable<any> {
-    return this.http.get(this.apiUrl);
+    return this.http.get(this.apiUrl + '/users');
   }
 }
