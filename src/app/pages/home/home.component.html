@@ -1,0 +1,14 @@
+<div>
+  <button (click)="fetchData()">Fetch Data</button>
+</div>
+
+<div *ngIf="loading">Loading...</div>
+
+<ul *ngIf="!loading && data.length > 0">
+  <li *ngFor="let item of data">{{ item.title }}</li>
+</ul>
+
+<div *ngIf="!loading && data.length === 0">
+  No data available.
+</div>
+
