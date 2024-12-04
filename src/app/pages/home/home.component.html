@@ -1,6 +1,239 @@
-<div>
-  <p>< develop here ></p>
+<div class="home-container">
+  <div class="header">
+    <div class="search-bar">
+      <p>Welcome to Your Music Player</p>
+      <input type="text" [(ngModel)]="searchQuery" (keydown.enter)="globalSearch()" placeholder="Search for songs, albums, artists, or playlists..." class="search-input" />
+      <button (click)="globalSearch()" class="search-button">Search</button>
+      <button (click)="goToProfile()" class="search-button">Profile</button>
+    </div>
+  </div>
+
+      <!-- <select [(ngModel)]="searchType" class="search-select">
+        <option value="track">Track</option>
+        <option value="album">Album</option>
+        <option value="artist">Artist</option>
+        <option value="playlist">Playlist</option>
+      </select> -->
+
+  <div *ngIf="searched" style="width: 90%;">
+    <!-- Tracks Section -->
+    <div class="tracks-header">
+      <h2>Tracks</h2>
+      <p class="more-tracks" *ngIf="tracks.length>0">more tracks</p>
+    </div>
+    <div *ngIf="tracks.length > 0" class="section">
+      <div *ngFor="let track of tracks" class="item" (click)="openModal(track, 'track')">
+        <img [src]="track.album?.images?.[0]?.url || 'assets/default-cover.png'" alt="Album cover"
+          class="item-cover" />
+        <div class="item-details">
+          <h3>{{ track.name || 'Unknown Track' }}</h3>
+          <p><strong>Artist:</strong> {{ getArtistsAsString(track.artists) }}</p>
+          <!-- <p><strong>Album:</strong> {{ track.album?.name || 'Unknown Album' }}</p> -->
+          <!-- <p><strong>Duration:</strong> {{ track.duration_ms | msToMinutes }}</p>
+          <p><strong>Popularity:</strong> {{ track.popularity || 'N/A' }}</p>
+          <p><strong>Explicit:</strong> {{ track.explicit ? 'Yes' : 'No' }}</p>
+          <p><strong>Track Number:</strong> {{ track.track_number || 'N/A' }}</p>
+          <p><strong>Available Markets:</strong> {{ track.album?.available_markets?.length || 0 }}</p>
+          <p><strong>External URL:</strong><a [href]="track.external_urls?.spotify" target="_blank">Open in Spotify</a></p> -->
+        </div>
+        <!-- <button (click)="playTrack(track.uri!)" class="play-button" [disabled]="!track.uri">
+          Play
+        </button> -->
+      </div>
+    </div>
+    <div *ngIf="!tracks.length" class="no-results">
+      <p>No tracks found. Try another search.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Albums Section -->
+    <div class="tracks-header">
+      <h2>Albums</h2>
+      <p class="more-tracks" *ngIf="albums.length>0">more albums</p>
+    </div>
+    <div *ngIf="albums.length > 0" class="section">
+      <div *ngFor="let album of albums" class="item" (click)="openModal(album, 'album')">
+        <img [src]="album.images?.[0]?.url || 'assets/default-cover.png'" alt="Album cover" class="item-cover" />
+        <div class="item-details">
+          <h3>{{ album.name || 'Unknown Album' }}</h3>
+          <p><strong>Artist:</strong> {{ getArtistsAsString(album.artists) }}</p>
+          <p><strong>Release Date:</strong> {{ album.release_date || 'Unknown' }}</p>
+          <!-- <p><strong>Type:</strong> {{ album.album_type || 'Unknown' }}</p> -->
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!albums.length" class="no-results">
+      <p>No albums found. Try another search.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Artists Section -->
+    <div class="tracks-header">
+      <h2>Artists</h2>
+      <p class="more-tracks" *ngIf="artists.length>0">more artists</p>
+    </div>
+    <div *ngIf="artists.length > 0" class="section">
+      <div *ngFor="let artist of artists" class="item" (click)="openModal(artist, 'artist')">
+        <img [src]="artist.images?.[0]?.url || 'assets/default-cover.png'" alt="Artist cover" class="item-cover" />
+        <div class="item-details">
+          <h3>{{ artist.name || 'Unknown Artist' }}</h3>
+          <p><strong>Genres:</strong> {{ artist.genres?.join(', ') || 'Unknown' }}</p>
+          <p><strong>Followers:</strong> {{ artist.followers?.total || 0 }}</p>
+          <!-- <p><strong>Popularity:</strong> {{ artist.popularity || 0 }}/100</p> -->
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!artists.length" class="no-results">
+      <p>No artists found. Try another search.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Playlists Section -->
+    <div class="tracks-header">
+      <h2>Playlists</h2>
+      <p class="more-tracks" *ngIf="playlists.length>0">more playlists</p>
+    </div>
+    <div *ngIf="playlists.length > 0" class="section">
+      <div *ngFor="let playlist of playlists" class="item" (click)="openModal(playlist, 'playlist')">
+        <div *ngIf="playlist">
+          <img [src]="playlist.images?.[0]?.url || 'assets/default-playlist.png'" alt="Playlist cover" class="item-cover" />
+          <div class="item-details">
+            <h3>{{ playlist.name || 'Unknown Playlist' }}</h3>
+            <p><strong>Owner:</strong> {{ playlist.owner?.display_name || 'Unknown' }}</p>
+            <p><strong>Description:</strong> {{ playlist.description || 'No description available' }}</p>
+            <p><strong>Total Tracks:</strong> {{ playlist.tracks.total || 0 }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!playlists.length" class="no-results">
+      <p>No playlists found. Try another search.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- modals -->
+<div class="modal" *ngIf="isModalOpen && selectedItemType == 'track'" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div>
+      <img [src]="selectedItem.album.images?.[0]?.url || 'assets/default-cover.png'" alt="Album cover" class="item-cover" />
+      <h2>{{ selectedItem.name || 'Unknown Track' }}</h2>
+      <p><strong>Artist:</strong> <span>{{ getArtistsAsString(selectedItem.artists) }}</span></p>
+      <p><strong>Album:</strong> <span>{{ selectedItem.album?.name || 'Unknown Album' }}</span></p>
+      <p><strong>Duration:</strong> <span>{{ selectedItem.duration_ms | msToMinutes }}</span></p>
+      <p><strong>Explicit:</strong> <span>{{ selectedItem.explicit ? 'Yes' : 'No' }}</span></p>
+      <p><strong>External URL:</strong> <span>{{ 'Open in Spotify' }}</span></p>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" *ngIf="isModalOpen && selectedItemType == 'album'" (click)="closeModal()">
+  <div class="modal-content modal-content-album" (click)="$event.stopPropagation()">
+    <div style="display: flex;">
+        <div class="album-details">
+          <img [src]="selectedItem.images?.[0]?.url || 'assets/default-cover.png'" alt="Album cover" class="item-cover" />
+          <div>
+            <h2>{{ selectedItem.name || 'Unknown Album' }}</h2>
+            <p><strong>Artist:</strong> <span>{{ getArtistsAsString(selectedItem.artists) }}</span></p>
+            <p><strong>Label:</strong> <span>{{ selectedItem.label || 'Unknown Label' }}</span></p>
+            <p><strong>Release Date:</strong> <span>{{ selectedItem.release_date }}</span></p>
+            <p><strong>Total Tracks:</strong> <span>{{ selectedItem.total_tracks || 'N/A' }}</span></p>
+          </div>
+        </div>
+        <div class="tracks-list" style="min-height: 80vh; height: 85vh; overflow: auto; width: 45%;">
+          <h2>Tracks</h2>
+            <div *ngFor="let track of selectedItem.tracks.items" style="display: flex; margin: 20px;">
+              <div style="display: flex; flex-direction: column; text-align: left; width: -webkit-fill-available;">
+                  <span><strong style="color: white;">{{ track.name }}</strong></span>
+                  <span style="margin-top: 10px; color: #7e7e7e;">{{ getArtistsAsString(track.artists) }}</span>
+                  <!-- <a [href]="track.external_urls.spotify" target="_blank">Open in Spotify</a> -->
+              </div>
+              <button (click)="playTrack(track.uri)" [disabled]="!track.uri">Play</button>
+          </div>
+        </div>
+    </div>
+  </div>
 </div>
 
 
 
+<div class="modal" *ngIf="isModalOpen && selectedItemType == 'artist'" (click)="closeModal()">
+  <div class="modal-content modal-content-album" (click)="$event.stopPropagation()">
+    <div style="display: flex;">
+        <div class="album-details">
+          <img [src]="selectedItem.images?.[0]?.url || 'assets/default-cover.png'" alt="Artist cover" class="item-cover" />
+          <div>
+            <h2>{{ selectedItem.name || 'Unknown Artist' }}</h2>
+            <p><strong>Genres:</strong> <span>{{ selectedItem.genres?.join(', ') || 'Unknown' }}</span></p>
+            <p><strong>Followers:</strong> <span>{{ selectedItem.followers?.total || 0 }}</span></p>
+          </div>
+        </div>
+        <div style="min-width: 55%;">
+          <h2 style="margin: 0px;">Top Albums</h2>
+          <div class="tracks-list" style="min-height: 40vh; height: 40vh; overflow: auto; display: flex; margin-left: 15px; margin-top: 15px;">
+              <div *ngFor="let album of selectedItem.albums" style="display: flex; margin: 5px; flex-direction: column; text-align: left; cursor: pointer;" (click)="openModal(album, 'album')">
+                <img [src]="album.images?.[0]?.url || 'assets/default-cover.png'" alt="Album cover" class="item-cover" style="width: 200px;" />
+                <div style="display: flex; flex-direction: column; text-align: left; width: -webkit-fill-available; padding-left: 20px;">
+                  <span><strong style="color: white;">{{ album.name }}</strong></span>
+                  <span style="margin-top: 5px; color: #7e7e7e;">{{ getArtistsAsString(album.artists) }}</span>
+                    <span style=" color: #7e7e7e;">{{ selectedItem.label || 'Unknown Label' }}</span>
+                    <span style=" color: #7e7e7e;">{{ selectedItem.release_date }}</span>
+                    <span style=" color: #7e7e7e;">{{ selectedItem.total_tracks || 'N/A' }} tracks</span>
+                </div>
+            </div>
+          </div>
+          <div class="tracks-list" style="min-height: 40vh; height: 40vh; overflow: auto;">
+            <h2>Top Tracks</h2>
+              <div *ngFor="let track of selectedItem.top_tracks" style="display: flex; margin: 20px;">
+                <div style="display: flex; flex-direction: column; text-align: left; width: -webkit-fill-available;">
+                    <span><strong style="color: white;">{{ track.name }}</strong></span>
+                    <span style="margin-top: 5px; color: #7e7e7e;">{{ track.album.name }}</span>
+                    <span style="color: #7e7e7e;">{{ getArtistsAsString(track.artists) }}</span>
+                    <!-- <a [href]="track.external_urls.spotify" target="_blank">Open in Spotify</a> -->
+                </div>
+                <button (click)="playTrack(track.uri)" [disabled]="!track.uri">Play</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" *ngIf="isModalOpen && selectedItemType == 'playlist'" (click)="closeModal()">
+  <div class="modal-content modal-content-album" (click)="$event.stopPropagation()">
+    <div style="display: flex;">
+        <div class="album-details">
+          <img [src]="selectedItem.images?.[0]?.url || 'assets/default-cover.png'" alt="Album cover" class="item-cover" />
+          <div>
+            <h2>{{ selectedItem.name || 'Unknown Playlist' }}</h2>
+            <p><strong>Owner:</strong> <span>{{ selectedItem.owner?.display_name || 'Unknown' }}</span></p>
+            <p><strong>Description:</strong> <span>{{ selectedItem.description || 'No description available' }}</span></p>
+            <p><strong>Total Tracks:</strong> <span>{{ selectedItem.tracks.total || 'N/A' }}</span></p>
+          </div>
+        </div>
+        <div class="tracks-list" style="min-height: 80vh; height: 85vh; overflow: auto; width: 45%;">
+          <h2>Tracks</h2>
+            <div *ngFor="let trackItem of selectedItem.tracks.items" style="display: flex; margin: 20px;">
+              <div style="display: flex; flex-direction: column; text-align: left; width: -webkit-fill-available;">
+                  <span><strong style="color: white;">{{ trackItem.track.name }}</strong></span>
+                  <span style="margin-top: 10px; color: #7e7e7e;">{{ trackItem.track.album.name || 'Unknown Album' }} : {{ getArtistsAsString(trackItem.track.artists) }}</span>
+                  <!-- <span style="margin-top: 10px; color: #7e7e7e;"></span> -->
+                  <!-- <a [href]="track.external_urls.spotify" target="_blank">Open in Spotify</a> -->
+              </div>
+              <button (click)="playTrack(trackItem.track.uri)" [disabled]="!trackItem.track.uri">Play</button>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+      <!-- <button (click)="playTrack(selectedItem.uri!)" class="play-button" [disabled]="!selectedItem.uri">
+        Play
+      </button> -->

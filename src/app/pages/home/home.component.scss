@@ -1,0 +1,356 @@
+$primary-color: #ff6f00; // Vibrant orange
+$background-color: #1a1a1a; // Dark background
+$card-background-color: #292929; // Dark gray card background
+$text-color: #f0f0f0; // Light text
+$input-border-color: #444444; // Subtle gray border
+$button-hover-color: #e65c00; // Slightly lighter orange for hover
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $background-color;
+  color: $text-color;
+  min-height: 100vh;
+
+//   .header {
+//     text-align: center;
+//     width: 100%;
+
+//     h1 {
+//       color: $primary-color;
+//     }
+//   }
+
+//   .search-bar {
+//     display: flex;
+//     gap: 1rem;
+//     margin-bottom: 2rem;
+//     flex-wrap: wrap;
+//     justify-content: center;
+//     width: 90%;
+
+//     .search-input,
+//     .search-select {
+//       padding: 0.75rem 1rem;
+//       border-radius: 8px;
+//       border: 1px solid $input-border-color;
+//       background-color: $card-background-color;
+//       color: $text-color;
+//       width: 80%;
+
+//       &:focus {
+//         outline: none;
+//         border-color: $primary-color;
+//       }
+//     }
+
+//     .search-button {
+//       padding: 0.75rem 1.5rem;
+//       background-color: $primary-color;
+//       color: $background-color;
+//       border-radius: 8px;
+//       font-weight: bold;
+//       cursor: pointer;
+
+//       &:hover {
+//         background-color: $button-hover-color;
+//       }
+//     }
+//   }
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center; // Center items horizontally
+    background-color: $background-color;
+    // padding: 1rem;
+  
+    .search-bar {
+      display: flex;
+      align-items: center; // Align items vertically
+      gap: 1rem; // Add spacing between elements
+      width: 100%;
+    //   max-width: 1200px; // Set a maximum width for the container
+      padding: 30px;
+  
+      p {
+        color: $primary-color;
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+  
+      .search-input {
+        flex: 1; // Takes up remaining space
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid $input-border-color;
+        background-color: $card-background-color;
+        color: $text-color;
+  
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+        }
+      }
+  
+      .search-button {
+        padding: 0.75rem 1rem;
+        background-color: $primary-color;
+        color: $background-color;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        white-space: nowrap; // Prevents button text from wrapping
+  
+        &:hover {
+          background-color: $button-hover-color;
+        }
+      }
+    }
+  }
+  
+
+  .section {
+    width: 100%;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); // 5 items per row
+    gap: 1rem; // Adjust spacing between items
+    justify-items: center;
+    text-align: center;
+
+    h2 {
+      margin-bottom: 1rem;
+      color: $primary-color;
+      grid-column: span 5; // Makes the header span all columns
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 2rem;
+      border-radius: 8px;
+      background-color: $card-background-color;
+      width: 100%; // Take full grid cell width
+      max-width: 270px; // Optional: Prevent excessive stretching
+      cursor: pointer;
+
+      .item-cover {
+        width: 100%;
+        height: 180px; // Fixed height for consistency
+        object-fit: cover;
+        border-radius: 6px;
+      }
+
+      .item-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        h3 {
+          margin: 0 0 0.5rem;
+          min-height: 45px;
+        }
+
+        p {
+          margin: 0.25rem 0;
+        }
+
+        .play-button {
+          margin-top: 0.5rem;
+          padding: 0.5rem 1rem;
+          background-color: $primary-color;
+          color: $background-color;
+          border-radius: 6px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $button-hover-color;
+          }
+
+          &:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+
+  .no-results {
+    text-align: center;
+    color: #bbb;
+    font-size: 1.2rem;
+  }
+}
+
+.tracks-header {
+  display: flex;
+  justify-content: space-between; // Ensures items are at opposite ends
+  align-items: center; // Aligns items vertically in the center
+  width: 100%; // Ensures the header spans the full width
+//   margin-bottom: 1rem; // Optional spacing below the header
+
+  h2 {
+    color: $primary-color;
+    font-size: 1.5rem;
+  }
+
+  .more-tracks {
+    color: $text-color;
+    font-size: 1rem;
+    cursor: pointer; // Makes it look clickable
+    text-decoration: underline; // Optional styling to indicate interactivity
+
+    &:hover {
+      color: $primary-color; // Change color on hover for better UX
+    }
+  }
+}
+
+.section-divider {
+    width: 50%; // Set width to 50% of the container
+    height: 1px; // Thin line
+    background-color: $input-border-color; // Matches app theme
+    margin: 3rem auto 1rem auto; // Centers the divider horizontally and sets vertical spacing
+    opacity: 0.7; // Subtle transparency
+}
+
+strong {
+    color: #7e7e7e;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+  
+
+.modal-content {
+  background-color: $card-background-color;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  gap: 2rem; /* Add space between sections */
+  max-height: 90vh;
+
+  h2 {
+    color: $primary-color;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    display: flex;
+    justify-content: space-between; // Space between key and value
+    align-items: center;
+    margin: 0.5rem 0; // Add some spacing between the lines
+    color: white;
+    
+    strong {
+      flex: 1; // Ensures the key (strong text) takes up a minimum amount of space
+    //   margin-right: 1rem; // Add space between the key and the value
+    }
+  
+    span {
+      flex: 2; // Allows the value to take up remaining space
+      text-align: left; // Align value to the left
+    }
+  
+    a {
+      color: #ff6f00; // Customize link color (use your theme color)
+      text-decoration: none; // Remove underline
+      &:hover {
+        text-decoration: underline; // Add underline on hover
+      }
+    }
+  }
+
+  button {
+    background-color: $primary-color;
+    color: $background-color;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+      background-color: $button-hover-color;
+    }
+  }
+
+}
+
+.modal-content-album {
+    max-width: 1200px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Styling for thin orange scrollbar */
+::-webkit-scrollbar {
+  width: 6px; /* Set the width of the scrollbar */
+  height: 6px; /* Set the height of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $primary-color; /* Set the color to your orange theme */
+  border-radius: 10px; /* Rounded edges for the thumb */
+  border: 2px solid #292929; /* Match the background for a cleaner look */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #292929; /* Dark background to match the modal */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-button {
+  display: none; /* Hide the buttons at the top and bottom */
+}

@@ -1,0 +1,30 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1 class="app-title">Muzi</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+        <input 
+          type="email" 
+          formControlName="email" 
+          placeholder="Email" 
+          class="form-input"
+          required 
+        />
+        <input 
+          type="password" 
+          formControlName="password" 
+          placeholder="Password" 
+          class="form-input"
+          required 
+        />
+        <button type="submit" class="login-button" [disabled]="isLoading">
+          {{ isLoading ? 'Logging In...' : 'Login' }}
+        </button>
+      </form>
+      
+    <div class="additional-options">
+      <p class="link-text">
+        Don't have an account? <a href="/register" class="link">Register</a>
+      </p>
+    </div>
+  </div>
+</div>

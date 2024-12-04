@@ -1,0 +1,45 @@
+<div class="register-container">
+    <div class="register-card">
+      <h1 class="app-title">Muzi</h1>
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister($event)" class="register-form">
+          <input
+            id="name"
+            formControlName="name"
+            type="text"
+            placeholder="Name"
+            class="form-input"
+          />
+          <input
+            id="email"
+            formControlName="email"
+            type="email"
+            placeholder="Email"
+            class="form-input"
+          />
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            placeholder="Password"
+            class="form-input"
+          />
+          <input
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            type="password"
+            placeholder="Confirm password"
+            class="form-input"
+          />
+          <button type="submit" class="register-button" [disabled]="isLoading">
+            {{ isLoading ? 'Signing In...' : 'Register' }}
+          </button>
+        </form>
+      
+        <div class="additional-options">
+            <p class="link-text">
+                Already have an account? <a href="/login" class="link">Login</a>
+            </p>
+        </div>
+    </div>
+  </div>
+  

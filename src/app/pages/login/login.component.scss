@@ -1,0 +1,101 @@
+$primary-color: #ff6f00; // Vibrant orange
+$background-color: #1a1a1a; // Dark background
+$card-background-color: #292929; // Dark gray card background
+$text-color: #f0f0f0; // Light text
+$input-border-color: #444444; // Subtle gray border
+
+@use 'sass:color';
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $background-color;
+
+  .login-card {
+    background-color: $card-background-color;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+
+    .app-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $primary-color;
+      margin-bottom: 1.5rem;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .form-input {
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid $input-border-color;
+        background-color: #202020;
+        color: $text-color;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+        }
+      }
+
+      .login-button {
+        background-color: $primary-color;
+        color: #ffffff;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        padding: 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: color.adjust($primary-color, $lightness: 10%); // Lighter version for hover
+        }
+
+        &:disabled {
+          background-color: color.adjust($primary-color, $lightness: -10%); // Darker version for disabled state
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .additional-options {
+      margin-top: 1.5rem;
+
+      .link {
+        color: $primary-color;
+        text-decoration: none;
+        font-size: 0.9rem;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .link-text {
+        color: $text-color;
+        font-size: 0.9rem;
+
+        .link {
+          color: $primary-color;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
